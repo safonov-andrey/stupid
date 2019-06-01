@@ -21,16 +21,19 @@ class Player {
 
 Player.getSmallestCard = function(cards, trump) {
     var smallestTrumpCard = null;
+    
     for (var rankKey in RANKS) {
         var rank = RANKS[rankKey];
 
         for (var suiteKey in SUITES) {
             var suite = SUITES[suiteKey];
-            
-            if (cards[suite][rank] && suite !== trump) {
-                return { suiteKey, rankKey };
-            } else {
-                smallestTrumpCard = { suiteKey, rankKey };
+
+            if (!!cards[suite][rank]) {
+                if (suite !== trump) {
+                    return { suiteKey, rankKey };
+                } else if (!smallestTrumpCard) {
+                    smallestTrumpCard = { suiteKey, rankKey };
+                }
             }
         }
     }
