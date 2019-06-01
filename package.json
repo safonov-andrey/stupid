@@ -1,0 +1,24 @@
+{
+  "name": "stupid",
+  "version": "1.0.0",
+  "description": "The project is solution for test task for Web applications developer position for the Igeolise company.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app/index.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/safonov-andrey/stupid.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/safonov-andrey/stupid/issues"
+  },
+  "homepage": "https://github.com/safonov-andrey/stupid#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  }
+}
