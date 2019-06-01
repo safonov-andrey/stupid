@@ -7,26 +7,28 @@
 //     // console.log(data.split('\n').join('\n------------------\n'));
 // });
 
-var play = require('./play');
-var TRUMP = require('./trump.enum');
-var RANK = require('./rank.enum');
+var Game = require('./game');
+var SUITES = require('./suite.enum');
 
 var data = {
-    trump: TRUMP.DIAMOND,
+    trump: SUITES.DIAMOND,
     player1: [
-        { suit: TRUMP.DIAMOND, rank: RANK.TWO },
-        { suit: TRUMP.SPADE, rank: RANK.TWO },
-        { suit: TRUMP.CLUB, rank: RANK.SEVEN },
-        { suit: TRUMP.HEART, rank: RANK.FIVE },
-        { suit: TRUMP.SPADE, rank: RANK.TEN }
+        // [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        // [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        // [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+        // [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
     player2: [
-        { suit: TRUMP.HEART, rank: RANK.TWO },
-        { suit: TRUMP.CLUB, rank: RANK.FIVE },
-        { suit: TRUMP.SPADE, rank: RANK.KING },
-        { suit: TRUMP.SPADE, rank: RANK.SEVEN },
-        { suit: TRUMP.SPADE, rank: RANK.JACK }
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0]
     ]
 };
 
-console.log(play(data));
+var game = new Game(data);
+game.run();
