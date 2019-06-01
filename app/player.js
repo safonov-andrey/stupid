@@ -1,43 +1,23 @@
-var RANKS = require('./rank.enum');
-var SUITES = require('./suite.enum');
+var Hand = require('./hand');
 
 class Player {
-    cards = null;
+    hand = null;
     trump = null;
 
     constructor(cards, trump) {
-        this.cards = cards;
-        this.trump = trump;
+        this.hand = new Hand(cards, trump);
     }
 
     attack() {
-        console.log(Player.getSmallestCard(this.cards, this.trump));
+        var smallestCard = this.hand.getSmallestCard();
+        var smallestCardCompanion = this.hand.getCardCompanion(smallestCard);
+
+        return [smallestCard, ...smallestCardCompanion];
     }
 
     defense(attackCard) {
 
-    }
-}
-
-Player.getSmallestCard = function(cards, trump) {
-    var smallestTrumpCard = null;
-    
-    for (var rankKey in RANKS) {
-        var rank = RANKS[rankKey];
-
-        for (var suiteKey in SUITES) {
-            var suite = SUITES[suiteKey];
-
-            if (!!cards[suite][rank]) {
-                if (suite !== trump) {
-                    return { suiteKey, rankKey };
-                } else if (!smallestTrumpCard) {
-                    smallestTrumpCard = { suiteKey, rankKey };
-                }
-            }
-        }
-    }
-    return smallestTrumpCard;
+    }   
 }
 
 module.exports = Player;

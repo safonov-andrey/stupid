@@ -11,7 +11,7 @@ class Game {
     }
 
     run() {
-        this.player1.attack();
+        console.log(this.player1.attack());
         // this.player2.attack();
     }
 }
