@@ -43,6 +43,26 @@ class Hand {
         });
         return cardsByRank;
     }
+
+    getHigherCard(card) {
+        for (var rank = card.rank + 1; rank <= Object.keys(RANKS).length; rank ++) {
+            if (!!this.cards[card.suite][rank]) {
+                this.cards[card.suite][rank] = 0;
+                return { suite: card.suite, rank };
+            }
+        }
+        if (card.suite !== this.trump) {
+            for (var rankKey in RANKS) {
+                if (!!this.cards[this.trump][RANKS[rankKey]]) {
+                    this.cards[this.trump][RANKS[rankKey]] = 0;
+                    return { suite: this.trump, rank: RANKS[rankKey] };
+                }
+            }
+            
+        }
+
+        return null;
+    }
 }
 
 module.exports = Hand;
