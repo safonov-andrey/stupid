@@ -1,28 +1,45 @@
-var RANKS = require('../enums/rank.enum');
-var SUITES = require('../enums/suite.enum');
-
 class Hand {
     cards = null;
     trump = null;
 
+    RANK_LENGTH = 13;
+    SUITE_LENGTH = 4;
+
     constructor(cards, trump) {
-        this.cards = cards;
+        this.cards = this.createCardsMatrix(cards);
         this.trump = trump;
+    }
+
+    createCardsMatrix(cards) {
+        var matrix = this.createEmptyMatrix();
+
+        cards.forEach(card => {
+            matrix[card.suite][card.rank] = 1;
+        });
+
+        return matrix;
+    }
+
+    createEmptyMatrix() {
+        var matrix = new Array(this.SUITE_LENGTH);
+        for (var i = 0; i < this.SUITE_LENGTH; i++) {
+            matrix[i] = new Array(this.RANK_LENGTH).fill(0);
+        }
+        return matrix;
     }
 
     getSmallestCard() {
         var smallestTrumpCard = null;
-    
-        for (var rankKey in RANKS) {
-            var rank = RANKS[rankKey];
-    
-            for (var suiteKey in SUITES) {
-                var suite = SUITES[suiteKey];
-    
-                if (!!this.cards[suite][rank]) {
+
+        for (var rank = 0; rank < this.RANK_LENGTH; rank++) {
+            for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {
+                if (this.cards[suite][rank] === 1) {
+                    // If suite is not trump - we have found the smallest non trump card, and can return it
                     if (suite !== this.trump) {
                         this.cards[suite][rank] = 0;
                         return { suite, rank };
+                    // If suite is trump - we should keep looking for the smallest non trump card,
+                    // but we should remember the samllest trump card
                     } else if (!smallestTrumpCard) {
                         this.cards[suite][rank] = 0;
                         smallestTrumpCard = { suite, rank };
@@ -30,34 +47,44 @@ class Hand {
                 }
             }
         }
+    
         return smallestTrumpCard;
     }
 
     getCardCompanion({ rank }) {
         var cardsByRank = [];
-        // TODO rewrite to index
-        this.cards.forEach((suiteCards, suite) => {
-            if (!!suiteCards[rank] && suite !== this.trump) {
+
+        for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {
+            if (this.cards[suite][rank] === 1 && suite !== this.trump) {
                 this.cards[suite][rank] = 0;
                 cardsByRank.push({ suite, rank });
             }
-        });
+        }
+
         return cardsByRank;
     }
 
     getHigherCard(card) {
-        // TODO submethod
-        for (var rank = card.rank + 1; rank <= Object.keys(RANKS).length; rank++) {
-            if (!!this.cards[card.suite][rank]) {
+        return this.getSameSuiteHigherCard(card) || this.getTrumpHigherCard(card);
+    }
+
+    getSameSuiteHigherCard(card) {
+        for (var rank = card.rank + 1; rank < this.RANK_LENGTH; rank++) {
+            if (this.cards[card.suite][rank] === 1) {
                 this.cards[card.suite][rank] = 0;
                 return { suite: card.suite, rank };
             }
         }
+
+        return null;
+    }
+
+    getTrumpHigherCard(card) {
         if (card.suite !== this.trump) {
-            for (var rankKey in RANKS) {
-                if (!!this.cards[this.trump][RANKS[rankKey]]) {
-                    this.cards[this.trump][RANKS[rankKey]] = 0;
-                    return { suite: this.trump, rank: RANKS[rankKey] };
+            for (var rank = 0; rank < this.RANK_LENGTH; rank++) {
+                if (this.cards[this.trump][rank] === 1) {
+                    this.cards[this.trump][rank] = 0;
+                    return { suite: this.trump, rank };
                 }
             }
         }
@@ -67,9 +94,9 @@ class Hand {
 
     cardsCount() {
         var count = 0;
-        for (var i = 0; i < 4; i++) {
-            for (var k = 0; k < 13; k++) {
-                count += this.cards[i][k];
+        for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {
+            for (var rank = 0; rank < this.RANK_LENGTH; rank++) {
+                count += this.cards[suite][rank];
             }
         }
 
