@@ -19,11 +19,11 @@ class Game {
 
         // }
 
-        this.table.addAttackCards(this.player1.attack());
+        this.table.addAttackCards(this.player1.startAttack());
         var defenseCards = this.player2.defense(this.table.getAttackCards());
         this.table.addDefenseCards(defenseCards);
 
-        if (this.table.allCardsCovered()) {
+        if (this.allCardsCovered()) {
             var attackCards = this.player1.attack(this.table.getDefenseCards());
             this.table.moveAllCoveredCards();
             this.table.addAttackCards(attackCards);
@@ -33,6 +33,33 @@ class Game {
         } else {
             console.log('loose');
         }
+    }
+
+    allCardsCovered() {
+        var attackCards = this.table.getAttackCards();
+        var defenseCards = this.table.getDefenseCards();
+
+        if (attackCards.length !== defenseCards.length) {
+            return false;
+        }
+
+        for (var i = 0; i < attackCards.length; i++) {
+            var attackCard = attackCards[i];
+            var defenseCard = defenseCards[i];
+
+            var equalSuits = attackCard.suit === defenseCard.suit;
+            var isDefenseTrump = defenseCard.suit === this.trump
+            var heigherRank = attackCard.rank < defenseCard.rank;
+
+            if (!equalSuits && !isDefenseTrump) {
+                return false;
+            }
+            if (equalSuits && !heigherRank) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
