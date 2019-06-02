@@ -8,10 +8,9 @@
 // });
 
 var Game = require('./components/game');
-var SUITES = require('./enums/suite.enum');
 
 var data = {
-    trump: SUITES.DIAMOND,
+    trump: 1,
     player1: [
         { suite: 0, rank: 4 },
         { suite: 1, rank: 0 },

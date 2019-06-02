@@ -50,7 +50,7 @@ class Game {
                 console.log('$$$$$ SWITCH PLAYERS $$$$$$');
             } else {
                 defensePlayer.addCards(this.table.cards.all);
-                console.log('$$$$$ PLAYER LOOSE $$$$$$');
+                console.log('$$$$$ LOOSE TURN $$$$$$');
             }
 
             this.table.clear();
@@ -58,10 +58,13 @@ class Game {
 
         if (!this.player1.hasCards()) {
             console.log('$$$$$ PLAYER1 WON $$$$$$');
+            return 1;
         } else if (!this.player2.hasCards()) {
             console.log('$$$$$ PLAYER2 WON $$$$$$');
+            return 2;
         } else {
             console.log('$$$$$ DEAD HEAT $$$$$$');
+            return 0;
         }
     }
 
