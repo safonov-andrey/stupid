@@ -15,27 +15,57 @@ class Game {
     }
 
     run() {
-        // while(this.player1.hasCards() && this.player2.hasCards()) {
+        var attackPlayer = this.player1;
+        var defensePlayer = this.player2;
 
-        // }
+        while (attackPlayer.hasCards() && defensePlayer.hasCards()) {
+            var attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount());
+            var defenseCards = defensePlayer.defense(attackCards);
 
-        this.table.addAttackCards(this.player1.startAttack());
-        var defenseCards = this.player2.defense(this.table.getAttackCards());
-        this.table.addDefenseCards(defenseCards);
+            console.log('----- Attack Cards -----');
+            console.log(attackCards);
+            console.log('----- Defense Cards -----');
+            console.log(defenseCards);
 
-        if (this.allCardsCovered()) {
-            var attackCards = this.player1.attack(this.table.getDefenseCards());
-            this.table.moveAllCoveredCards();
             this.table.addAttackCards(attackCards);
-
-            var defenseCards = this.player2.defense(this.table.getAttackCards());
             this.table.addDefenseCards(defenseCards);
+
+            while(this.areAllCardsCovered() && attackCards.length) {
+                attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount(), defenseCards);
+                defenseCards = defensePlayer.defense(attackCards);
+
+                console.log('----- Attack Cards -----');
+                console.log(attackCards);
+                console.log('----- Defense Cards -----');
+                console.log(defenseCards);
+
+                this.table.addAttackCards(attackCards);
+                this.table.addDefenseCards(defenseCards);
+            }
+
+            if (this.areAllCardsCovered()) {
+                var tmpPlayer = attackPlayer;
+                attackPlayer = defensePlayer;
+                defensePlayer = tmpPlayer;
+                console.log('$$$$$ SWITCH PLAYERS $$$$$$');
+            } else {
+                defensePlayer.addCards(this.table.cards.all);
+                console.log('$$$$$ PLAYER LOOSE $$$$$$');
+            }
+
+            this.table.clear();
+        }
+
+        if (!this.player1.hasCards()) {
+            console.log('$$$$$ PLAYER1 WON $$$$$$');
+        } else if (!this.player2.hasCards()) {
+            console.log('$$$$$ PLAYER2 WON $$$$$$');
         } else {
-            console.log('loose');
+            console.log('$$$$$ DEAD HEAT $$$$$$');
         }
     }
 
-    allCardsCovered() {
+    areAllCardsCovered() {
         var attackCards = this.table.getAttackCards();
         var defenseCards = this.table.getDefenseCards();
 
@@ -44,19 +74,24 @@ class Game {
         }
 
         for (var i = 0; i < attackCards.length; i++) {
-            var attackCard = attackCards[i];
-            var defenseCard = defenseCards[i];
-
-            var equalSuits = attackCard.suit === defenseCard.suit;
-            var isDefenseTrump = defenseCard.suit === this.trump
-            var heigherRank = attackCard.rank < defenseCard.rank;
-
-            if (!equalSuits && !isDefenseTrump) {
+            if (!this.isCardCovered(attackCards[i], defenseCards[i])) {
                 return false;
             }
-            if (equalSuits && !heigherRank) {
-                return false;
-            }
+        }
+
+        return true;
+    }
+
+    isCardCovered(attackCard, defenseCard) {
+        var equalSuits = attackCard.suit === defenseCard.suit;
+        var isDefenseTrump = defenseCard.suit === this.trump
+        var heigherRank = attackCard.rank < defenseCard.rank;
+
+        if (!equalSuits && !isDefenseTrump) {
+            return false;
+        }
+        if (equalSuits && !heigherRank) {
+            return false;
         }
 
         return true;

@@ -28,7 +28,8 @@ class Table {
         return this.cards.defense;
     }
 
-    moveAllCoveredCards() {
+    clear() {
+        this.cards.all = [];
         this.cards.attack = [];
         this.cards.defense = [];
     }

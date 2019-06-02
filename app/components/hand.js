@@ -6,18 +6,13 @@ class Hand {
     SUITE_LENGTH = 4;
 
     constructor(cards, trump) {
-        this.cards = this.createCardsMatrix(cards);
+        this.createCardsMatrix(cards);
         this.trump = trump;
     }
 
     createCardsMatrix(cards) {
-        var matrix = this.createEmptyMatrix();
-
-        cards.forEach(card => {
-            matrix[card.suite][card.rank] = 1;
-        });
-
-        return matrix;
+        this.cards = this.createEmptyMatrix();
+        this.addCards(cards);
     }
 
     createEmptyMatrix() {
@@ -101,6 +96,12 @@ class Hand {
         }
 
         return count;
+    }
+
+    addCards(cards) {
+        cards.forEach(card => {
+            this.cards[card.suite][card.rank] = 1;
+        });
     }
 }
 

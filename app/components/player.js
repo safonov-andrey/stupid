@@ -8,6 +8,18 @@ class Player {
         this.hand = new Hand(cards, trump);
     }
 
+    attack(maxCardsCount, availableCards) {
+        var resultAttackCards = [];
+        if (availableCards && availableCards.length) {
+            resultAttackCards = this.continueAttack(availableCards);
+        } else {
+            resultAttackCards = this.startAttack();
+        }
+
+        resultAttackCards.length = resultAttackCards.length > maxCardsCount ? maxCardsCount : resultAttackCards.length;
+        return resultAttackCards;
+    }
+
     startAttack() {
         var smallestCard = this.hand.getSmallestCard();
         var smallestCardCompanion = this.hand.getCardCompanion(smallestCard);
@@ -15,7 +27,7 @@ class Player {
         return [smallestCard, ...smallestCardCompanion];
     }
 
-    attack(availableCards) {
+    continueAttack(availableCards) {
         var attackCards = []
         availableCards.forEach(availableCard => {
             attackCards.push(...this.hand.getCardCompanion(availableCard));
@@ -37,6 +49,10 @@ class Player {
 
     hasCards() {
         return this.hand.cardsCount() > 0;
+    }
+
+    addCards(cards) {
+        this.hand.addCards(cards);
     }
 }
 
