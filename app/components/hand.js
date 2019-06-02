@@ -1,5 +1,5 @@
-var RANKS = require('./rank.enum');
-var SUITES = require('./suite.enum');
+var RANKS = require('../enums/rank.enum');
+var SUITES = require('../enums/suite.enum');
 
 class Hand {
     cards = null;
@@ -35,6 +35,7 @@ class Hand {
 
     getCardCompanion({ rank }) {
         var cardsByRank = [];
+        // TODO rewrite to index
         this.cards.forEach((suiteCards, suite) => {
             if (!!suiteCards[rank] && suite !== this.trump) {
                 this.cards[suite][rank] = 0;
@@ -45,7 +46,8 @@ class Hand {
     }
 
     getHigherCard(card) {
-        for (var rank = card.rank + 1; rank <= Object.keys(RANKS).length; rank ++) {
+        // TODO submethod
+        for (var rank = card.rank + 1; rank <= Object.keys(RANKS).length; rank++) {
             if (!!this.cards[card.suite][rank]) {
                 this.cards[card.suite][rank] = 0;
                 return { suite: card.suite, rank };
@@ -58,10 +60,20 @@ class Hand {
                     return { suite: this.trump, rank: RANKS[rankKey] };
                 }
             }
-            
         }
 
         return null;
+    }
+
+    cardsCount() {
+        var count = 0;
+        for (var i = 0; i < 4; i++) {
+            for (var k = 0; k < 13; k++) {
+                count += this.cards[i][k];
+            }
+        }
+
+        return count;
     }
 }
 

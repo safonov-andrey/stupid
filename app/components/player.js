@@ -8,6 +8,7 @@ class Player {
         this.hand = new Hand(cards, trump);
     }
 
+    // TODO split on to methods
     attack(availableCards) {
         if (availableCards) {
             var attackCards = []
@@ -32,7 +33,11 @@ class Player {
         console.log(attackCards);
         console.log(defenseCards);
         return defenseCards;
-    }   
+    }
+
+    hasCards() {
+        return this.hand.cardsCount() > 0;
+    }
 }
 
 module.exports = Player;

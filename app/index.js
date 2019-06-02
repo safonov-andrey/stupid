@@ -7,8 +7,8 @@
 //     // console.log(data.split('\n').join('\n------------------\n'));
 // });
 
-var Game = require('./game');
-var SUITES = require('./suite.enum');
+var Game = require('./components/game');
+var SUITES = require('./enums/suite.enum');
 
 var data = {
     trump: SUITES.DIAMOND,

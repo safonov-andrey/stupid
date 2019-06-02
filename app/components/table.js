@@ -19,6 +19,7 @@ class Table {
         return this.cards.attack;
     }
 
+    // TODO this check should in the game class
     addDefenseCards(cards) {
         if (cards && cards.length) {
             this.cards.all.push(...cards);
@@ -30,12 +31,15 @@ class Table {
         return this.cards.defense;
     }
 
+    // TODO move this method to the game class
     allCardsCovered() {
         if (this.cards.attack.length !== this.cards.defense.length) {
             return false;
         }
 
-        this.cards.attack.forEach((attackCard, i) => {
+        // TODO for
+        for (var i = 0; i < this.cards.attack.length; i++) {
+            var attackCard = this.cards.attack[i];
             var defenseCard = this.cards.defense[i];
 
             var equalSuits = attackCard.suit === defenseCard.suit;
@@ -48,9 +52,14 @@ class Table {
             if (equalSuits && !heigherRank) {
                 return false;
             }
-        });
+        }
 
         return true;
+    }
+
+    moveAllCoveredCards() {
+        this.cards.attack = [];
+        this.cards.defense = [];
     }
 }
 
