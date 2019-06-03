@@ -27,7 +27,7 @@ class Game {
             console.log(defensePlayer.hand.getCards());
 
             var attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount());
-            var revertCards = defensePlayer.attack(attackPlayer.hand.cardsCount(), attackCards);
+            var revertCards = defensePlayer.getRevertCards(attackPlayer.hand.cardsCount() - attackCards.length, attackCards);
 
             console.log('----- Attack Cards -----');
             console.log(attackCards);
@@ -55,7 +55,7 @@ class Game {
             this.table.addDefenseCards(defenseCards);
 
             while(this.areAllCardsCovered() && attackCards.length) {
-                attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount(), defenseCards);
+                attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount(), defenseCards, true);
                 defenseCards = defensePlayer.defense(attackCards);
 
                 console.log('----- Attack Cards -----');
