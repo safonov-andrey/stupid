@@ -28,8 +28,9 @@ class Game {
             Logger.logAttackPlayerHand(attackPlayer);
             Logger.logDefensePlayerHand(defensePlayer);
 
-            var attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount());
-            var revertCards = defensePlayer.getRevertCards(attackPlayer.hand.cardsCount() - attackCards.length, attackCards);
+            var attackCards = attackPlayer.startAttack(defensePlayer.hand.cardsCount());
+            var revertCards = defensePlayer
+                .getRevertCards(attackPlayer.hand.cardsCount() - attackCards.length, attackCards);
 
             Logger.logAttackCards(attackCards);
 
@@ -53,7 +54,7 @@ class Game {
             this.table.addDefenseCards(defenseCards);
 
             while(this.areAllCardsCovered() && attackCards.length) {
-                attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount(), defenseCards, true);
+                attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount(), defenseCards);
                 defenseCards = defensePlayer.defense(attackCards);
 
                 Logger.logAttackCards(attackCards);
@@ -76,6 +77,10 @@ class Game {
             this.table.clear();
         }
 
+        return this.getGameResult(attackPlayer, defensePlayer);
+    }
+
+    getGameResult(attackPlayer, defensePlayer) {
         if (!attackPlayer.hasCards() && !defensePlayer.hasCards()) {
             Logger.gameOver.deadHeat();
             return 0;

@@ -49,11 +49,11 @@ class Hand {
         return smallestTrumpCard;
     }
 
-    getCardCompanion({ rank }, isTrumpIncluded = false) {
+    getCardCompanion({ rank }) {
         var cardsByRank = [];
 
         for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {
-            if (this.cards[suite][rank] === 1 && (isTrumpIncluded || suite !== this.trump)) {
+            if (this.cards[suite][rank] === 1) {
                 this.cards[suite][rank] = 0;
                 cardsByRank.push({ suite, rank });
             }

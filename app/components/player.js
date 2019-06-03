@@ -10,30 +10,21 @@ class Player {
         this.nameIndex = nameIndex;
     }
 
-    attack(maxCardsCount, availableCards, isTrumpIncluded = false) {
+    attack(maxCardsCount, availableCards) {
         var resultAttackCards = [];
-        if (availableCards && availableCards.length) {
-            resultAttackCards = this.continueAttack(availableCards, isTrumpIncluded);
-        } else {
-            resultAttackCards = this.startAttack();
-        }
+
+        availableCards.forEach(availableCard => {
+            resultAttackCards.push(...this.hand.getCardCompanion(availableCard));
+        });
 
         return this.getMaxCards(resultAttackCards, maxCardsCount);
     }
 
-    startAttack() {
+    startAttack(maxCardsCount) {
         var smallestCard = this.hand.getSmallestCard();
-        var smallestCardCompanion = this.hand.getCardCompanion(smallestCard, true);
+        var smallestCardCompanion = this.hand.getCardCompanion(smallestCard);
 
-        return [smallestCard, ...smallestCardCompanion];
-    }
-
-    continueAttack(availableCards, isTrumpIncluded = false) {
-        var attackCards = []
-        availableCards.forEach(availableCard => {
-            attackCards.push(...this.hand.getCardCompanion(availableCard, isTrumpIncluded));
-        });
-        return attackCards;
+        return this.getMaxCards([smallestCard, ...smallestCardCompanion], maxCardsCount);
     }
 
     defense(attackCards) {
@@ -56,7 +47,7 @@ class Player {
     getRevertCards(maxCardsCount, availableCards) {
         var attackCards = []
         availableCards.forEach(availableCard => {
-            attackCards.push(...this.hand.getCardCompanion(availableCard, true));
+            attackCards.push(...this.hand.getCardCompanion(availableCard));
         });
         return this.getMaxCards(attackCards, maxCardsCount);;
     }
