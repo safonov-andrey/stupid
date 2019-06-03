@@ -1,3 +1,7 @@
+/**
+ * Hand class holds the state of player's hand. 
+ * We store cards in two-dimensional array: rows are suits, columns are ranks.
+ */
 class Hand {
     cards = null;
     trump = null;
@@ -10,11 +14,20 @@ class Hand {
         this.trump = trump;
     }
 
+    /**
+     * Create card matrix according to cards data files.
+     * @param { [{suite, rank}] } cards - cards from data file.
+     */
     createCardsMatrix(cards) {
         this.cards = this.createEmptyMatrix();
         this.addCards(cards);
     }
 
+    /**
+     * Create empty card matrix.
+     * @returns { [[Number]] } - matrix SUITE_LENGTH x RANK_LENGTH, with 0 and 1.
+     *                           Which represent is card exist in the hand or not.
+     */
     createEmptyMatrix() {
         var matrix = new Array(this.SUITE_LENGTH);
         for (var i = 0; i < this.SUITE_LENGTH; i++) {
@@ -23,6 +36,10 @@ class Hand {
         return matrix;
     }
 
+    /**
+     * Return the smallest non-trump card.
+     * @returns { {suite, rank} }
+     */
     getSmallestCard() {
         var smallestTrumpCard = null;
 
@@ -49,6 +66,11 @@ class Hand {
         return smallestTrumpCard;
     }
 
+    /**
+     * Return card 'companion', same rank but different suite.
+     * @param { {suite, rank} } card - card for which companion should be found.
+     * @returns { [{suite, rank}] }
+     */
     getCardCompanion({ rank }) {
         var cardsByRank = [];
 
@@ -62,10 +84,21 @@ class Hand {
         return cardsByRank;
     }
 
+    /**
+     * Return the smallest card that could beat input card. 
+     * This card could be either of same suit, higher rank or smallest trump.
+     * @param { {suite, rank} } card - card that should be beaten.
+     * @returns { {suite, rank} | null }
+     */
     getHigherCard(card) {
         return this.getSameSuiteHigherCard(card) || this.getTrumpHigherCard(card);
     }
 
+    /**
+     * Returns the smallest same suite card that could beat input card.
+     * @param { {suite, rank} } card - card that should be beaten.
+     * @returns { {suite, rank} | null }
+     */
     getSameSuiteHigherCard(card) {
         for (var rank = card.rank + 1; rank < this.RANK_LENGTH; rank++) {
             if (this.cards[card.suite][rank] === 1) {
@@ -77,6 +110,11 @@ class Hand {
         return null;
     }
 
+    /**
+     * Returns the smallest trump card that could beat input card.
+     * @param { {suite, rank} } card - card that should be beaten.
+     * @returns { {suite, rank} | null }
+     */
     getTrumpHigherCard(card) {
         if (card.suite !== this.trump) {
             for (var rank = 0; rank < this.RANK_LENGTH; rank++) {
@@ -90,6 +128,10 @@ class Hand {
         return null;
     }
 
+    /**
+     * Return count of cards in hand.
+     * @returns {Number}
+     */
     cardsCount() {
         var count = 0;
         for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {
@@ -101,12 +143,20 @@ class Hand {
         return count;
     }
 
+    /**
+     * Add card to the hand.
+     * @param { {suite, rank} } cards - card that should be added.
+     */
     addCards(cards) {
         cards.forEach(card => {
             this.cards[card.suite][card.rank] = 1;
         });
     }
 
+    /**
+     * Get and remove a card from the hand.
+     * @returns { {suite, rank} }
+     */
     getCards() {
         var objCards = [];
         for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {

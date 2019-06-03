@@ -1,3 +1,7 @@
+/**
+ * This class holds the state of game table: all cards that are
+ *  on the table and current turn defence and attack cards.
+ *  */
 class Table {
     trump = null;
     cards = {
