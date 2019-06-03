@@ -4,7 +4,7 @@
   "description": "The project is solution for test task for Web applications developer position for the Igeolise company.",
   "main": "index.js",
   "scripts": {
-    "start": "node app/index.js",
+    "start": "node --inspect app/index.js",
     "test": "mocha"
   },
   "repository": {

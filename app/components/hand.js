@@ -32,6 +32,9 @@ class Hand {
                     // If suite is not trump - we have found the smallest non trump card, and can return it
                     if (suite !== this.trump) {
                         this.cards[suite][rank] = 0;
+                        if (smallestTrumpCard) {
+                            this.cards[smallestTrumpCard.suite][smallestTrumpCard.rank] = 1;    
+                        }
                         return { suite, rank };
                     // If suite is trump - we should keep looking for the smallest non trump card,
                     // but we should remember the samllest trump card
@@ -102,6 +105,19 @@ class Hand {
         cards.forEach(card => {
             this.cards[card.suite][card.rank] = 1;
         });
+    }
+
+    getCards() {
+        var objCards = [];
+        for (var suite = 0; suite < this.SUITE_LENGTH; suite++) {
+            for (var rank = 0; rank < this.RANK_LENGTH; rank++) {
+                if (this.cards[suite][rank]) {
+                    objCards.push({ suite, rank });
+                }
+            }
+        }
+
+        return objCards;
     }
 }
 

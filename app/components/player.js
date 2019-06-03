@@ -3,9 +3,11 @@ var Hand = require('./hand');
 class Player {
     hand = null;
     trump = null;
+    nameIndex = null;
 
-    constructor(cards, trump) {
+    constructor(cards, trump, nameIndex) {
         this.hand = new Hand(cards, trump);
+        this.nameIndex = nameIndex;
     }
 
     attack(maxCardsCount, availableCards) {
@@ -16,8 +18,16 @@ class Player {
             resultAttackCards = this.startAttack();
         }
 
-        resultAttackCards.length = resultAttackCards.length > maxCardsCount ? maxCardsCount : resultAttackCards.length;
-        return resultAttackCards;
+        var maxAttackCards = [];
+        resultAttackCards.forEach((card, i) => {
+            if (i < maxCardsCount) {
+                maxAttackCards.push(card);
+            } else {
+                this.hand.addCards([card]);
+            }
+        });
+
+        return maxAttackCards;
     }
 
     startAttack() {
