@@ -4,9 +4,6 @@ var fileParser = require('./utils/file-parser');
 fileParser.getDataFromFile('./app/data/test.data.txt', dataArray => {
     var results = [];
 
-    // var game = new Game(dataArray[47]);
-    // console.log(game.run());
-
     dataArray.forEach(data => {
         var game = new Game(data);
         results.push(game.run());
@@ -19,16 +16,9 @@ fileParser.getDataFromFile('./app/data/test.data.txt', dataArray => {
 });
 
 function getWrongIndex(actual, expected) {
-    var wrongCount = 0;
-    var firstWrong = -1;
     for (var i = 0; i < actual.length; i++) {
         if (actual.charAt(i) !== expected.charAt(i)) {
-            console.log('actual = ' + actual.charAt(i));
-            console.log('expected = ' + expected.charAt(i));
-            wrongCount++;
-            firstWrong = firstWrong === -1 ? i : firstWrong;
+            return i;
         }
     }
-    console.log("Wrong answers: "+ wrongCount);
-    return firstWrong;
 }
