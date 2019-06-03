@@ -21,4 +21,6 @@ function getWrongIndex(actual, expected) {
             return i;
         }
     }
+
+    return -1;
 }

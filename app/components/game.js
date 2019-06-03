@@ -1,3 +1,5 @@
+var Logger = require('../utils/logger');
+
 var Player = require('./player');
 var Table = require('./table');
 
@@ -17,20 +19,19 @@ class Game {
     }
 
     run() {
+        Logger.logGameStart();
+
         var attackPlayer = this.player1;
         var defensePlayer = this.player2;
 
         while (attackPlayer.hasCards() && defensePlayer.hasCards()) {
-            console.log('----- Attack Player Hand -----');
-            console.log(attackPlayer.hand.getCards());
-            console.log('----- Defense Player Hand -----');
-            console.log(defensePlayer.hand.getCards());
+            Logger.logAttackPlayerHand(attackPlayer);
+            Logger.logDefensePlayerHand(defensePlayer);
 
             var attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount());
             var revertCards = defensePlayer.getRevertCards(attackPlayer.hand.cardsCount() - attackCards.length, attackCards);
 
-            console.log('----- Attack Cards -----');
-            console.log(attackCards);
+            Logger.logAttackCards(attackCards);
 
             if (revertCards.length) {
                 attackCards.push(...revertCards);
@@ -39,17 +40,14 @@ class Game {
                 attackPlayer = defensePlayer;
                 defensePlayer = tmpPlayer;
 
-                console.log('----- Revert Card -----');
-                console.log(revertCards);
-                console.log('----- Attack Cards -----');
-                console.log(attackCards);
-                console.log('$$$$$ SWITCH PLAYERS WITH REVERT CARD $$$$$$');
+                Logger.logRevertCards(revertCards);
+                Logger.logAttackCards(attackCards);
+                Logger.warning.playersSwitchedRevertCard();
             }
 
             var defenseCards = defensePlayer.defense(attackCards);
 
-            console.log('----- Defense Cards -----');
-            console.log(defenseCards);
+            Logger.logDefenseCards(defenseCards);
 
             this.table.addAttackCards(attackCards);
             this.table.addDefenseCards(defenseCards);
@@ -58,10 +56,8 @@ class Game {
                 attackCards = attackPlayer.attack(defensePlayer.hand.cardsCount(), defenseCards, true);
                 defenseCards = defensePlayer.defense(attackCards);
 
-                console.log('----- Attack Cards -----');
-                console.log(attackCards);
-                console.log('----- Defense Cards -----');
-                console.log(defenseCards);
+                Logger.logAttackCards(attackCards);
+                Logger.logDefenseCards(defenseCards);
 
                 this.table.addAttackCards(attackCards);
                 this.table.addDefenseCards(defenseCards);
@@ -71,23 +67,23 @@ class Game {
                 var tmpPlayer = attackPlayer;
                 attackPlayer = defensePlayer;
                 defensePlayer = tmpPlayer;
-                console.log('$$$$$ SWITCH PLAYERS $$$$$$');
+                Logger.warning.defenseWonTurn();
             } else {
                 defensePlayer.addCards(this.table.cards.all);
-                console.log('$$$$$ LOOSE TURN $$$$$$');
+                Logger.warning.defenseLooseTurn();
             }
 
             this.table.clear();
         }
 
         if (!attackPlayer.hasCards() && !defensePlayer.hasCards()) {
-            console.log('$$$$$ DEAD HEAT $$$$$$');
+            Logger.gameOver.deadHeat();
             return 0;
         } else if (!attackPlayer.hasCards()) {
-            console.log(`$$$$$ ATTACK PLAYER ${attackPlayer.nameIndex} WON $$$$$$`);
+            Logger.gameOver.attackPlayerWon(attackPlayer.nameIndex);
             return attackPlayer.nameIndex;
         } else if (!defensePlayer.hasCards()) {
-            console.log(`$$$$$ DEFENSE PLAYER ${defensePlayer.nameIndex} WON $$$$$$`);
+            Logger.gameOver.defensePlayerWon(defensePlayer.nameIndex);
             return defensePlayer.nameIndex;
         }
     }
